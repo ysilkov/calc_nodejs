@@ -96,8 +96,11 @@ export const Add = createSlice({
       state.numberB = action.payload.b;
       state.result = action.payload.result;
     },
-    undo(state, action) {
+    undoOne(state, action) {
       state.numberA = action.payload;
+    },
+    undoTwo(state, action) {
+      state.numberB = action.payload;
     },
   },
   extraReducers: {
@@ -115,6 +118,13 @@ export const Add = createSlice({
     },
   },
 });
-export const { changeValueA, changeValueB, changeResult, error, clear, undo } =
-  Add.actions;
+export const {
+  changeValueA,
+  changeValueB,
+  changeResult,
+  error,
+  clear,
+  undoOne,
+  undoTwo,
+} = Add.actions;
 export default Add.reducer;
