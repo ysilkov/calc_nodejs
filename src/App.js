@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
 import {
   changeValueA,
   changeValueB,
@@ -73,6 +75,7 @@ function App() {
   };
   return (
     <>
+    <Header />
       {error ? (
         <h2 className="error">Сталася помилка: {error}</h2>
       ) : (
@@ -141,6 +144,7 @@ function App() {
           </div>
         </div>
       )}
+      <Footer />
     </>
   );
 }
