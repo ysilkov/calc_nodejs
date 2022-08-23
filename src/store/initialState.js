@@ -3,4 +3,6 @@ export const initialState = {
   numberA: "",
   numberB: "",
   error: "",
+  arrA:[0],
+  arrB: [0],
 };

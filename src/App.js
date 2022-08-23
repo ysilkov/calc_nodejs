@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
@@ -12,34 +11,33 @@ import {
   clear,
   undoOne,
   undoTwo,
-  redo
+  undoResult,
+  redo,
 } from "./store/reducers/add";
 
 function App() {
   const dispatch = useDispatch();
   const number1 = useSelector((state) => state.add.numberA);
   const number2 = useSelector((state) => state.add.numberB);
+  let arrNumberA = useSelector((state) => state.add.arrA);
+  let arrNumberB = useSelector((state) => state.add.arrB);
   const obj = { a: number1, b: number2 };
   const result = useSelector((state) => state.add.result);
   const error = useSelector((state) => state.add.error);
-
-  useEffect(() => {
-    localStorage.setItem("result", JSON.stringify(result));
-  });
+ 
   const inputNumberA = (e) => {
     if (isNaN(e.target.value)) {
       alert("Введіть будь ласка число");
       e.target.value = "";
     }
-    localStorage.setItem("number1", JSON.stringify(e.target.value));
     dispatch(changeValueA(e.target.value));
   };
+
   const inputNumberB = (e) => {
     if (isNaN(e.target.value)) {
       alert("Введіть будь ласка число");
       e.target.value = "";
     }
-    localStorage.setItem("number2", JSON.stringify(e.target.value));
     dispatch(changeValueB(e.target.value));
   };
   const clearInput = () => {
@@ -58,26 +56,41 @@ function App() {
     dispatch(undoTwo(newNumber2));
     document.querySelector(".input-value-two").value = newNumber2;
   };
+  const undoResultChange = () => {
+    const result = (document.querySelector(".input-value-result").value = "");
+    dispatch(undoResult(result));
+  };
   const undoState = () => {
-    document.querySelector(".input-value-result").value = "";
     undoNumber1();
     undoNumber2();
+    undoResultChange();
   };
   const redoState = () => {
-    const a = document.querySelector(".input-value-one").value = JSON.parse(
-      localStorage.getItem("number1")
-    );
-    const b = document.querySelector(".input-value-two").value = JSON.parse(
-      localStorage.getItem("number2")
-    );
-    const result = document.querySelector(".input-value-result").value = JSON.parse(
-      localStorage.getItem("result")
-    );
-    dispatch(redo([a, b, result]));
+    let a = (document.querySelector(".input-value-one").value =
+      arrNumberA[arrNumberA.length - 1]);
+    let b = (document.querySelector(".input-value-two").value =
+      arrNumberB[arrNumberB.length - 1]);
+    let arrNewA;
+    let arrNewB;
+    let arrNewResult;
+    if (a !== 0) {
+      arrNewA = arrNumberA.filter((el, index) => index < arrNumberA.length - 1);
+    } else {
+      document.querySelector(".input-value-one").value = "";
+    }
+    if (b !== 0) {
+      arrNewB = arrNumberB.filter((el, index) => index < arrNumberB.length - 1);
+    } else {
+      document.querySelector(".input-value-two").value = "";
+      return;
+    }
+    dispatch(changeValueA(String(a)));
+    dispatch(changeValueB(String(b)));
+    dispatch(redo([arrNewA, arrNewB, arrNewResult]));
   };
   return (
     <>
-    <Header />
+      <Header />
       {error ? (
         <h2 className="error">Сталася помилка: {error}</h2>
       ) : (
