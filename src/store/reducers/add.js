@@ -102,6 +102,11 @@ export const Add = createSlice({
     undoTwo(state, action) {
       state.numberB = action.payload;
     },
+    redo(state, action) {
+      state.numberA = action.payload[0];
+      state.numberB = action.payload[1];
+      state.result = action.payload[2];
+    },
   },
   extraReducers: {
     [getAdd.rejected]: (state, action) => {
@@ -126,5 +131,6 @@ export const {
   clear,
   undoOne,
   undoTwo,
+  redo
 } = Add.actions;
 export default Add.reducer;

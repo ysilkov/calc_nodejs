@@ -12,6 +12,7 @@ import {
   clear,
   undoOne,
   undoTwo,
+  redo
 } from "./store/reducers/add";
 
 function App() {
@@ -62,16 +63,17 @@ function App() {
     undoNumber1();
     undoNumber2();
   };
-  const redo = () => {
-    document.querySelector(".input-value-one").value = JSON.parse(
+  const redoState = () => {
+    const a = document.querySelector(".input-value-one").value = JSON.parse(
       localStorage.getItem("number1")
     );
-    document.querySelector(".input-value-two").value = JSON.parse(
+    const b = document.querySelector(".input-value-two").value = JSON.parse(
       localStorage.getItem("number2")
     );
-    document.querySelector(".input-value-result").value = JSON.parse(
+    const result = document.querySelector(".input-value-result").value = JSON.parse(
       localStorage.getItem("result")
     );
+    dispatch(redo([a, b, result]));
   };
   return (
     <>
@@ -123,7 +125,7 @@ function App() {
                 /
               </button>
               <button onClick={() => undoState()}>UNDO</button>
-              <button onClick={() => redo()}>REDO</button>
+              <button onClick={() => redoState()}>REDO</button>
               <button
                 className="button-clear"
                 onClick={() => {
